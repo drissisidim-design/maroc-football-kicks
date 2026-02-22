@@ -19,41 +19,68 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center overflow-hidden">
-        <div className="absolute inset-0">
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.2 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.8, ease: "easeOut" }}
+        >
           <img src={heroBg} alt="Chaussures de football" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
-        </div>
+        </motion.div>
 
         <div className="relative container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
             className="max-w-xl"
           >
             <motion.p
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
               className="text-primary font-display tracking-[0.3em] uppercase text-sm mb-4"
             >
               Nouvelle collection 2026
             </motion.p>
-            <h1 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9] mb-6">
+            <motion.h1
+              className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9] mb-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" }}
+            >
               Domine le
               <br />
-              <span className="neon-text">terrain</span>
-            </h1>
-            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+              <motion.span
+                className="neon-text inline-block"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.5, type: "spring", stiffness: 200 }}
+              >
+                terrain
+              </motion.span>
+            </motion.h1>
+            <motion.p
+              className="text-muted-foreground text-lg mb-8 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.6 }}
+            >
               Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc.
-            </p>
-            <div className="flex flex-wrap gap-4">
+            </motion.p>
+            <motion.div
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.6 }}
+            >
               <Button asChild size="lg" className="font-display tracking-widest uppercase text-sm h-14 px-8 neon-glow">
                 <Link to="/boutique">
                   Voir la boutique <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
