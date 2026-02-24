@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KICKSTORE — Chaussures de Football Premium au Maroc</title>
+  <meta name="description" content="Votre destination premium pour les chaussures de football au Maroc. Nike, Adidas, Puma — Livraison rapide partout au Maroc." />
+  <link rel="stylesheet" href="youcan-styles.css" />
+</head>
+<body>
+
+  <!-- ══════════ NAVBAR ══════════ -->
+  <nav class="navbar">
+    <div class="container inner">
+      <a href="/" class="logo"><span class="neon-text">KICK</span>STORE</a>
+
+      <div class="nav-links" style="display:flex;align-items:center;gap:2rem;">
+        <a href="/" class="nav-link active">Accueil</a>
+        <a href="/boutique" class="nav-link">Boutique</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <!-- Cart button -->
+        <button data-open-cart style="position:relative;background:none;border:none;color:var(--fg);cursor:pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge">0</span>
+        </button>
+
+        <!-- Mobile menu toggle -->
+        <button data-toggle-menu style="display:none;background:none;border:none;color:var(--fg);cursor:pointer;" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" style="max-height:0;overflow:hidden;transition:max-height .3s ease;">
+      <div style="padding:1rem;">
+        <a href="/" class="nav-link" style="display:block;padding:.5rem 0;">Accueil</a>
+        <a href="/boutique" class="nav-link" style="display:block;padding:.5rem 0;">Boutique</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero">
+    <div class="hero-bg">
+      <!-- Remplace par ton image héro -->
+      <img src="https://images.unsplash.com/photo-1511886929837-354d827aae26?w=1600&q=80" alt="Chaussures de football" />
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="container hero-content">
+      <p class="hero-subtitle animate-fade-in-left delay-400">Nouvelle collection 2026</p>
+
+      <h1 class="hero-title">
+        Domine le<br />
+        <span class="highlight">terrain</span>
+      </h1>
+
+      <p class="hero-text">
+        Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc.
+      </p>
+
+      <div class="hero-cta">
+        <a href="/boutique" class="btn btn-primary neon-glow">
+          Voir la boutique
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FEATURES STRIP ══════════ -->
+  <section class="features-strip reveal">
+    <div class="container">
+      <div class="grid">
+        <div class="item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7h8m0 0v8m0-8-8 8-4-4-6 6"/></svg>
+          Livraison partout au Maroc
+        </div>
+        <div class="item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+          100% Authentique
+        </div>
+        <div class="item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Retours sous 14 jours
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ BEST SELLERS ══════════ -->
+  <section class="section reveal">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;">
+        <div>
+          <p class="section-label">Populaire</p>
+          <h2 class="section-title">Best Sellers</h2>
+        </div>
+        <a href="/boutique" class="nav-link" style="font-size:.875rem;display:flex;align-items:center;gap:.25rem;">
+          Tout voir
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="products-grid reveal-stagger">
+        <!-- ── Produit 1 ── -->
+        <a href="/produit/1" class="product-card reveal-child">
+          <div class="image-wrap">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Mercurial Vapor XV Elite FG" />
+            <span class="badge badge-promo">-24%</span>
+            <div class="hover-overlay"><span>Voir le produit</span></div>
+          </div>
+          <div class="info">
+            <p class="brand">Nike</p>
+            <p class="name">Mercurial Vapor XV Elite FG</p>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <span class="price">1890 MAD</span>
+              <span class="price-old">2490 MAD</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- ── Produit 2 ── -->
+        <a href="/produit/2" class="product-card reveal-child">
+          <div class="image-wrap">
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80" alt="Predator Edge+ FG" />
+            <span class="badge badge-best">BEST SELLER</span>
+            <div class="hover-overlay"><span>Voir le produit</span></div>
+          </div>
+          <div class="info">
+            <p class="brand">Adidas</p>
+            <p class="name">Predator Edge+ FG</p>
+            <span class="price">2190 MAD</span>
+          </div>
+        </a>
+
+        <!-- ── Produit 3 ── -->
+        <a href="/produit/3" class="product-card reveal-child">
+          <div class="image-wrap">
+            <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=80" alt="Future Ultimate FG" />
+            <span class="badge badge-promo">-20%</span>
+            <div class="hover-overlay"><span>Voir le produit</span></div>
+          </div>
+          <div class="info">
+            <p class="brand">Puma</p>
+            <p class="name">Future Ultimate FG</p>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <span class="price">1590 MAD</span>
+              <span class="price-old">1990 MAD</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PROMO BANNER ══════════ -->
+  <section class="section promo-banner reveal">
+    <div class="gradient-radial" style="position:absolute;inset:0;"></div>
+    <div class="container" style="position:relative;">
+      <p class="section-label" style="text-align:center;">Offre limitée</p>
+      <h2 class="title" style="text-align:center;">
+        Jusqu'à <span class="neon-text">-25%</span>
+      </h2>
+      <p style="text-align:center;color:var(--muted);max-width:28rem;margin:1rem auto 2rem;">
+        Profitez de nos promotions exceptionnelles sur une sélection de chaussures de football.
+      </p>
+      <div style="text-align:center;">
+        <a href="/boutique" class="btn btn-primary neon-glow">Voir les promos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TESTIMONIALS ══════════ -->
+  <section class="section reveal">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <p class="section-label">Avis clients</p>
+        <h2 class="section-title">Ce qu'ils disent</h2>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;" class="reveal-stagger">
+        <!-- Avis 1 -->
+        <div class="testimonial reveal-child">
+          <div class="stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="text">"Qualité incroyable, livraison rapide! Mes Mercurial sont parfaites."</p>
+          <p class="author">Youssef B.</p>
+          <p class="city">Casablanca</p>
+        </div>
+
+        <!-- Avis 2 -->
+        <div class="testimonial reveal-child">
+          <div class="stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="text">"Meilleur store de foot au Maroc, je recommande à 100%!"</p>
+          <p class="author">Amine K.</p>
+          <p class="city">Rabat</p>
+        </div>
+
+        <!-- Avis 3 -->
+        <div class="testimonial reveal-child">
+          <div class="stars">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="text">"Super service client, les chaussures sont authentiques."</p>
+          <p class="author">Omar H.</p>
+          <p class="city">Marrakech</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2.5rem;">
+        <div>
+          <a href="/" class="logo" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;letter-spacing:.1em;">
+            <span class="neon-text">KICK</span>STORE
+          </a>
+          <p style="margin-top:.75rem;font-size:.875rem;color:var(--muted);line-height:1.6;">
+            Votre destination premium pour les chaussures de football au Maroc. Livraison rapide partout au Maroc 🇲🇦
+          </p>
+        </div>
+        <div>
+          <h4 style="font-family:var(--font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Navigation</h4>
+          <a href="/" style="display:block;font-size:.875rem;color:var(--muted);margin-bottom:.5rem;">Accueil</a>
+          <a href="/boutique" style="display:block;font-size:.875rem;color:var(--muted);">Boutique</a>
+        </div>
+        <div>
+          <h4 style="font-family:var(--font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Aide</h4>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:.5rem;">Guide des tailles</p>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:.5rem;">Livraison & Retours</p>
+          <p style="font-size:.875rem;color:var(--muted);">FAQ</p>
+        </div>
+        <div>
+          <h4 style="font-family:var(--font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Contact</h4>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:.5rem;">contact@kickstore.ma</p>
+          <p style="font-size:.875rem;color:var(--muted);margin-bottom:.5rem;">+212 6 00 00 00 00</p>
+          <p style="font-size:.875rem;color:var(--muted);">Casablanca, Maroc</p>
+        </div>
+      </div>
+      <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);text-align:center;font-size:.75rem;color:var(--muted);">
+        © 2026 KICKSTORE. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════ CART DRAWER ══════════ -->
+  <div class="cart-overlay" data-close-cart></div>
+  <div class="cart-drawer">
+    <div class="header">
+      <span>Panier</span>
+      <button data-close-cart style="background:none;border:none;color:var(--fg);cursor:pointer;font-size:1.5rem;">✕</button>
+    </div>
+    <div class="items">
+      <p style="color:var(--muted);text-align:center;margin-top:2rem;">Votre panier est vide</p>
+    </div>
+    <div class="footer">
+      <div class="total">
+        <span>Total</span>
+        <span class="neon-text">0 MAD</span>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;">Commander</button>
+    </div>
+  </div>
+
+  <!-- JS animations -->
+  <script src="youcan-animations.js"></script>
+
+  <style>
+    /* Mobile menu toggle visible on small screens */
+    @media (max-width: 768px) {
+      .nav-links { display: none !important; }
+      [data-toggle-menu] { display: block !important; }
+    }
+  </style>
+</body>
+</html>
