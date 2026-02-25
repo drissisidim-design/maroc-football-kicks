@@ -1,16 +1,46 @@
-import { Product } from "@/data/products";
+import { ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/stores/cartStore";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ShoppingBag, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ProductCardProps {
-  product: Product;
+  product: ShopifyProduct;
   index?: number;
 }
 
 const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
-  const discount = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+  const { node } = product;
+  const addItem = useCartStore((s) => s.addItem);
+  const isLoading = useCartStore((s) => s.isLoading);
+  const openCart = useCartStore((s) => s.openCart);
+
+  const price = parseFloat(node.priceRange.minVariantPrice.amount);
+  const compareAt = node.compareAtPriceRange
+    ? parseFloat(node.compareAtPriceRange.maxVariantPrice.amount)
     : 0;
+  const hasDiscount = compareAt > price;
+  const discount = hasDiscount ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
+  const currency = node.priceRange.minVariantPrice.currencyCode;
+  const image = node.images.edges[0]?.node;
+  const firstVariant = node.variants.edges[0]?.node;
+
+  const handleQuickAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!firstVariant) return;
+    await addItem({
+      product,
+      variantId: firstVariant.id,
+      variantTitle: firstVariant.title,
+      price: firstVariant.price,
+      quantity: 1,
+      selectedOptions: firstVariant.selectedOptions || [],
+    });
+    toast.success("Ajouté au panier !");
+    openCart();
+  };
 
   return (
     <motion.div
@@ -19,47 +49,54 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
     >
-      <Link to={`/produit/${product.id}`} className="group block">
+      <Link to={`/product/${node.handle}`} className="group block">
         <div className="relative overflow-hidden rounded-lg bg-secondary/30 aspect-square">
-          <motion.img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
-          />
+          {image ? (
+            <img
+              src={image.url}
+              alt={image.altText || node.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+              No image
+            </div>
+          )}
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1">
-            {product.isPromo && (
-              <span className="px-2 py-1 text-xs font-bold rounded bg-primary text-primary-foreground">
-                -{discount}%
-              </span>
-            )}
-            {product.isBestSeller && (
-              <span className="px-2 py-1 text-xs font-bold rounded bg-foreground text-background">
-                BEST SELLER
-              </span>
-            )}
-          </div>
+          {hasDiscount && (
+            <span className="absolute top-3 left-3 px-2 py-1 text-xs font-bold rounded bg-primary text-primary-foreground">
+              -{discount}%
+            </span>
+          )}
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
             <span className="font-display text-sm tracking-widest uppercase text-primary border border-primary px-4 py-2 rounded">
               Voir le produit
             </span>
+            {firstVariant && (
+              <button
+                onClick={handleQuickAdd}
+                disabled={isLoading}
+                className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
+              >
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingBag className="w-4 h-4" />}
+              </button>
+            )}
           </div>
         </div>
 
         <div className="mt-3 space-y-1">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">{product.brand}</p>
           <h3 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
-            {product.name}
+            {node.title}
           </h3>
           <div className="flex items-center gap-2">
-            <span className="font-display text-lg neon-text">{product.price} MAD</span>
-            {product.originalPrice && (
+            <span className="font-display text-lg neon-text">
+              {price.toFixed(2)} {currency}
+            </span>
+            {hasDiscount && (
               <span className="text-sm text-muted-foreground line-through">
-                {product.originalPrice} MAD
+                {compareAt.toFixed(2)} {currency}
               </span>
             )}
           </div>

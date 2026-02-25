@@ -1,18 +1,28 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ShoppingBag, Check } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products } from "@/data/products";
-import { useCart } from "@/context/CartContext";
+import { useShopifyProduct } from "@/hooks/useShopifyProducts";
+import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 
 const ProductDetail = () => {
-  const { id } = useParams();
-  const product = products.find((p) => p.id === id);
-  const { addToCart } = useCart();
-  const [selectedSize, setSelectedSize] = useState<number | null>(null);
+  const { handle } = useParams();
+  const { data: product, isLoading: productLoading } = useShopifyProduct(handle || "");
+  const addItem = useCartStore((s) => s.addItem);
+  const cartLoading = useCartStore((s) => s.isLoading);
+  const openCart = useCartStore((s) => s.openCart);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
+
+  if (productLoading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -25,20 +35,31 @@ const ProductDetail = () => {
     );
   }
 
-  const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast.error("Veuillez sélectionner une pointure");
-      return;
-    }
-    addToCart(product, selectedSize);
+  const variants = product.variants.edges.map((e) => e.node);
+  const selectedVariant = variants.find((v) => v.id === selectedVariantId) || variants[0];
+  const price = parseFloat(selectedVariant.price.amount);
+  const compareAt = product.compareAtPriceRange
+    ? parseFloat(product.compareAtPriceRange.maxVariantPrice.amount)
+    : 0;
+  const hasDiscount = compareAt > price;
+  const discount = hasDiscount ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
+  const images = product.images.edges.map((e) => e.node);
+
+  const handleAddToCart = async () => {
+    if (!selectedVariant) return;
+    await addItem({
+      product: { node: product },
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
+      quantity: 1,
+      selectedOptions: selectedVariant.selectedOptions || [],
+    });
     setAdded(true);
     toast.success("Ajouté au panier !");
+    openCart();
     setTimeout(() => setAdded(false), 2000);
   };
-
-  const discount = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0;
 
   return (
     <div className="min-h-screen pt-24 pb-16">
@@ -51,102 +72,97 @@ const ProductDetail = () => {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             className="relative aspect-square rounded-lg overflow-hidden bg-secondary/30"
           >
-            <motion.img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.5 }}
-            />
-            {product.isPromo && (
+            {images[0] ? (
+              <motion.img
+                src={images[0].url}
+                alt={images[0].altText || product.title}
+                className="w-full h-full object-cover"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.5 }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground">No image</div>
+            )}
+            {hasDiscount && (
               <span className="absolute top-4 left-4 px-3 py-1 text-sm font-bold rounded bg-primary text-primary-foreground">
                 -{discount}%
               </span>
             )}
           </motion.div>
 
-          {/* Info */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
             className="flex flex-col"
           >
-            <p className="text-primary font-display tracking-[0.3em] uppercase text-xs mb-2">{product.brand}</p>
-            <h1 className="font-display text-3xl md:text-4xl font-bold uppercase mb-4">{product.name}</h1>
+            <h1 className="font-display text-3xl md:text-4xl font-bold uppercase mb-4">{product.title}</h1>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className="font-display text-3xl neon-text">{product.price} MAD</span>
-              {product.originalPrice && (
-                <span className="text-lg text-muted-foreground line-through">{product.originalPrice} MAD</span>
+              <span className="font-display text-3xl neon-text">
+                {price.toFixed(2)} {selectedVariant.price.currencyCode}
+              </span>
+              {hasDiscount && (
+                <span className="text-lg text-muted-foreground line-through">
+                  {compareAt.toFixed(2)} {selectedVariant.price.currencyCode}
+                </span>
               )}
             </div>
 
             <p className="text-muted-foreground leading-relaxed mb-8">{product.description}</p>
 
-            {/* Size selector */}
-            <div className="mb-8">
-              <h3 className="font-display uppercase tracking-wider text-sm mb-3">Pointure</h3>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`w-14 h-12 rounded-lg text-sm font-medium border transition-all ${
-                      selectedSize === size
-                        ? "border-primary bg-primary/10 text-primary neon-border"
-                        : "border-border text-muted-foreground hover:border-primary/50"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+            {/* Options / Variants */}
+            {product.options.map((option) => (
+              <div key={option.name} className="mb-6">
+                <h3 className="font-display uppercase tracking-wider text-sm mb-3">{option.name}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {variants
+                    .filter((v) => v.availableForSale)
+                    .map((variant) => {
+                      const optionValue = variant.selectedOptions.find((o) => o.name === option.name)?.value;
+                      return (
+                        <button
+                          key={variant.id}
+                          onClick={() => setSelectedVariantId(variant.id)}
+                          className={`px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
+                            (selectedVariantId || variants[0]?.id) === variant.id
+                              ? "border-primary bg-primary/10 text-primary neon-border"
+                              : "border-border text-muted-foreground hover:border-primary/50"
+                          }`}
+                        >
+                          {optionValue || variant.title}
+                        </button>
+                      );
+                    })}
+                </div>
               </div>
-            </div>
+            ))}
 
-            {/* Add to cart */}
             <Button
               onClick={handleAddToCart}
+              disabled={cartLoading}
               size="lg"
               className="h-14 font-display tracking-widest uppercase text-sm neon-glow"
             >
               <AnimatePresence mode="wait">
                 {added ? (
-                  <motion.span
-                    key="check"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="flex items-center gap-2"
-                  >
+                  <motion.span key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-2">
                     <Check className="w-5 h-5" /> Ajouté !
                   </motion.span>
+                ) : cartLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <motion.span
-                    key="add"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="flex items-center gap-2"
-                  >
+                  <motion.span key="add" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-2">
                     <ShoppingBag className="w-5 h-5" /> Ajouter au panier
                   </motion.span>
                 )}
               </AnimatePresence>
             </Button>
-
-            {/* Category */}
-            <div className="mt-8 pt-6 border-t border-border">
-              <p className="text-xs text-muted-foreground">
-                Catégorie : <span className="text-foreground">{product.category}</span>
-              </p>
-            </div>
           </motion.div>
         </div>
       </div>

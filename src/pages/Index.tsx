@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Truck, Shield, RotateCcw } from "lucide-react";
+import { ArrowRight, Star, Truck, Shield, RotateCcw, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import heroBg from "@/assets/hero-bg.jpg";
-
-const bestSellers = products.filter((p) => p.isBestSeller);
 
 const testimonials = [
   { name: "Youssef B.", city: "Casablanca", text: "Qualité incroyable, livraison rapide! Mes Mercurial sont parfaites.", rating: 5 },
@@ -15,6 +13,8 @@ const testimonials = [
 ];
 
 const Index = () => {
+  const { data: products = [], isLoading } = useShopifyProducts(6);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -30,12 +30,7 @@ const Index = () => {
         </motion.div>
 
         <div className="relative container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="max-w-xl"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="max-w-xl">
             <motion.p
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -50,8 +45,7 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" }}
             >
-              Domine le
-              <br />
+              Domine le<br />
               <motion.span
                 className="neon-text inline-block"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -108,7 +102,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Best Sellers */}
+      {/* Products */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -119,18 +113,32 @@ const Index = () => {
           >
             <div>
               <p className="text-primary font-display tracking-[0.3em] uppercase text-xs mb-2">Populaire</p>
-              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase">Best Sellers</h2>
+              <h2 className="font-display text-3xl md:text-4xl font-bold uppercase">Nos Produits</h2>
             </div>
             <Link to="/boutique" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">
               Tout voir <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bestSellers.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="aspect-square rounded-lg bg-secondary/30 animate-pulse" />
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-20">
+              <ShoppingBag className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg mb-2">Aucun produit disponible</p>
+              <p className="text-sm text-muted-foreground">Ajoutez des produits à votre store Shopify pour les voir ici.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product, i) => (
+                <ProductCard key={product.node.id} product={product} index={i} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -138,11 +146,7 @@ const Index = () => {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 gradient-radial" />
         <div className="relative container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
             <p className="text-primary font-display tracking-[0.3em] uppercase text-xs mb-4">Offre limitée</p>
             <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
               Jusqu'à <span className="neon-text">-25%</span>
@@ -160,12 +164,7 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-12">
             <p className="text-primary font-display tracking-[0.3em] uppercase text-xs mb-2">Avis clients</p>
             <h2 className="font-display text-3xl md:text-4xl font-bold uppercase">Ce qu'ils disent</h2>
           </motion.div>

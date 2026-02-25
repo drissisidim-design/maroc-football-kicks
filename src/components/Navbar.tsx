@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ShoppingBag, Menu, X } from "lucide-react";
-import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/stores/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
-  const { totalItems, openCart } = useCart();
+  const totalItems = useCartStore((s) => s.totalItems());
+  const openCart = useCartStore((s) => s.openCart);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -22,7 +23,6 @@ const Navbar = () => {
           <span className="text-foreground">STORE</span>
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <Link
@@ -65,7 +65,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
