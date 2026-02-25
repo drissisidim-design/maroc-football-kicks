@@ -19,8 +19,8 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="font-display text-2xl font-bold tracking-wider">
-          <span className="neon-text">KICK</span>
-          <span className="text-foreground">STORE</span>
+          <span className="neon-text">GO</span>
+          <span className="text-foreground">DASSES</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
