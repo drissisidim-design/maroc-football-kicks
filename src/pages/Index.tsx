@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Truck, Shield, RotateCcw, ShoppingBag } from "lucide-react";
+import { ArrowRight, Star, Truck, Shield, RotateCcw, ShoppingBag, Send } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
@@ -14,6 +16,8 @@ const testimonials = [
 
 const Index = () => {
   const { data: products = [], isLoading } = useShopifyProducts(6);
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
 
   return (
     <div className="min-h-screen">
@@ -192,6 +196,41 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="py-20 border-t border-border">
+        <div className="container mx-auto px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-lg mx-auto text-center">
+            <p className="text-primary font-display tracking-[0.3em] uppercase text-xs mb-2">Newsletter</p>
+            <h2 className="font-display text-3xl font-bold uppercase mb-4">Restez informé</h2>
+            <p className="text-muted-foreground text-sm mb-6">
+              Recevez nos offres exclusives et les dernières nouveautés directement dans votre boîte mail.
+            </p>
+            {subscribed ? (
+              <motion.p initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-primary font-medium">
+                ✅ Merci pour votre inscription !
+              </motion.p>
+            ) : (
+              <form
+                onSubmit={(e) => { e.preventDefault(); if (email.includes("@")) setSubscribed(true); }}
+                className="flex gap-2"
+              >
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="votre@email.com"
+                  className="h-12 flex-1"
+                  required
+                />
+                <Button type="submit" size="lg" className="h-12 font-display tracking-widest uppercase text-xs neon-glow px-6">
+                  <Send className="w-4 h-4" />
+                </Button>
+              </form>
+            )}
+          </motion.div>
         </div>
       </section>
     </div>
