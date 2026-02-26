@@ -5,7 +5,7 @@ import { ArrowLeft, Loader2, ShoppingBag, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore } from "@/stores/cartStore";
-import { updateCartBuyerIdentity, updateCartNote } from "@/lib/shopify";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -96,33 +96,34 @@ const Checkout = () => {
       } else if (!phoneClean.startsWith('+')) {
         phoneClean = '+212' + phoneClean;
       }
-      const fakeEmail = `${phoneClean.replace(/[+]/g, '')}@godasses.ma`;
 
-      const identityResult = await updateCartBuyerIdentity(cartId, {
-        email: fakeEmail,
-        firstName: form.firstName,
-        lastName: form.lastName,
-        phone: phoneClean,
-        address1: form.address1,
-        city: form.city,
-        country: 'MA',
-        zip: '00000',
+      // Create draft order in Shopify via edge function
+      const orderItems = items.map(i => ({
+        variantId: i.variantId,
+        quantity: i.quantity,
+      }));
+
+      const { data, error } = await supabase.functions.invoke('create-order', {
+        body: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          phone: phoneClean,
+          address1: form.address1,
+          city: form.city,
+          items: orderItems,
+        },
       });
 
-      if (!identityResult.success) {
-        console.error('Buyer identity error:', identityResult.errors);
-        toast.error("Erreur", { description: "Impossible de mettre à jour les informations. Veuillez réessayer." });
+      if (error || !data?.success) {
+        console.error('Order error:', error || data);
+        toast.error("Erreur", { description: "Impossible de créer la commande. Veuillez réessayer." });
         setLoading(false);
         return;
       }
 
-      // Add detailed note for merchant to contact the client
-      const itemsSummary = items.map(i => `${i.product.node.title} x${i.quantity}`).join(', ');
-      await updateCartNote(cartId, `🛒 Commande via godasses.ma\n📞 Tel: ${form.phone}\n👤 ${form.firstName} ${form.lastName}\n📍 ${form.address1}, ${form.city}\n📦 Articles: ${itemsSummary}\n💰 Total: ${totalPrice.toFixed(2)} MAD`);
-
       setOrderSuccess(true);
       clearCart();
-      toast.success("Commande confirmée !");
+      toast.success(`Commande ${data.orderName || ''} confirmée !`);
     } catch (err) {
       console.error("Checkout error:", err);
       toast.error("Erreur", { description: "Une erreur est survenue. Veuillez réessayer." });
