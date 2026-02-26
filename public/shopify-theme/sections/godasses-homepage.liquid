@@ -1,0 +1,505 @@
+{% comment %}
+  ══════════════════════════════════════════════════
+  GODASSES.MA — Section Homepage complète
+  Colle ce fichier dans : sections/godasses-homepage.liquid
+  Puis ajoute-le à ton layout ou template.
+  ══════════════════════════════════════════════════
+{% endcomment %}
+
+<style>
+  /* ---------- Fonts ---------- */
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  /* ---------- Variables ---------- */
+  :root {
+    --gd-bg: #0d0d0d;
+    --gd-fg: #f2f2f2;
+    --gd-card-bg: #141414;
+    --gd-primary: #00e600;
+    --gd-primary-dark: #00b300;
+    --gd-muted: #8c8c8c;
+    --gd-border: #2e2e2e;
+    --gd-glass-bg: rgba(255, 255, 255, 0.05);
+    --gd-glass-border: rgba(255, 255, 255, 0.1);
+    --gd-neon-glow: 0 0 10px rgba(0, 230, 0, 0.5), 0 0 40px rgba(0, 230, 0, 0.2);
+    --gd-neon-glow-strong: 0 0 20px rgba(0, 230, 0, 0.4), 0 0 60px rgba(0, 230, 0, 0.15);
+    --gd-radius: 0.75rem;
+    --gd-font-display: 'Oswald', sans-serif;
+    --gd-font-body: 'Inter', sans-serif;
+  }
+
+  /* ---------- Reset scope ---------- */
+  .gd-wrapper { font-family: var(--gd-font-body); background: var(--gd-bg); color: var(--gd-fg); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  .gd-wrapper *, .gd-wrapper *::before, .gd-wrapper *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  .gd-wrapper h1, .gd-wrapper h2, .gd-wrapper h3, .gd-wrapper h4 { font-family: var(--gd-font-display); text-transform: uppercase; line-height: 0.95; }
+  .gd-wrapper a { color: inherit; text-decoration: none; }
+  .gd-wrapper img { max-width: 100%; display: block; }
+
+  /* Scrollbar */
+  .gd-wrapper ::-webkit-scrollbar { width: 6px; }
+  .gd-wrapper ::-webkit-scrollbar-track { background: var(--gd-bg); }
+  .gd-wrapper ::-webkit-scrollbar-thumb { background: var(--gd-border); border-radius: 3px; }
+  .gd-wrapper ::-webkit-scrollbar-thumb:hover { background: var(--gd-primary); }
+
+  /* Utilities */
+  .gd-container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+  .gd-neon-text { color: var(--gd-primary); text-shadow: var(--gd-neon-glow); }
+  .gd-neon-glow { box-shadow: var(--gd-neon-glow-strong); }
+  .gd-glass { background: var(--gd-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--gd-glass-border); }
+  .gd-gradient-radial { background: radial-gradient(ellipse at center, rgba(0, 230, 0, 0.15) 0%, transparent 70%); }
+
+  /* Buttons */
+  .gd-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--gd-font-display); font-size: 0.875rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.875rem 2rem; border: none; border-radius: var(--gd-radius); cursor: pointer; transition: all 0.3s ease; }
+  .gd-btn-primary { background: var(--gd-primary); color: var(--gd-bg); font-weight: 600; }
+  .gd-btn-primary:hover { background: var(--gd-primary-dark); box-shadow: var(--gd-neon-glow-strong); transform: translateY(-2px); }
+
+  /* Keyframes */
+  @keyframes gdFadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes gdFadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes gdScaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+  @keyframes gdZoomOut { from { transform: scale(1.2); } to { transform: scale(1); } }
+  @keyframes gdPulseNeon { 0%, 100% { box-shadow: 0 0 10px rgba(0, 230, 0, 0.3); } 50% { box-shadow: 0 0 25px rgba(0, 230, 0, 0.6); } }
+
+  .gd-animate-fade-in-up { animation: gdFadeInUp 0.6s ease-out both; }
+  .gd-delay-400 { animation-delay: 0.4s; }
+  .gd-delay-600 { animation-delay: 0.6s; }
+  .gd-delay-1000 { animation-delay: 1s; }
+  .gd-delay-1200 { animation-delay: 1.2s; }
+  .gd-delay-1500 { animation-delay: 1.5s; }
+
+  /* Scroll Reveal */
+  .gd-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .gd-reveal.gd-revealed { opacity: 1; transform: translateY(0); }
+
+  /* Navbar */
+  .gd-navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: var(--gd-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--gd-glass-border); }
+  .gd-navbar .gd-inner { display: flex; align-items: center; justify-content: space-between; height: 4rem; }
+  .gd-navbar .gd-logo { font-family: var(--gd-font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.1em; }
+  .gd-navbar .gd-nav-link { font-family: var(--gd-font-display); font-size: 0.875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gd-muted); transition: color 0.3s; }
+  .gd-navbar .gd-nav-link:hover, .gd-navbar .gd-nav-link.active { color: var(--gd-primary); }
+  .gd-cart-badge { position: absolute; top: -4px; right: -4px; width: 20px; height: 20px; border-radius: 50%; background: var(--gd-primary); color: var(--gd-bg); font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+  /* Hero */
+  .gd-hero { position: relative; height: 100vh; display: flex; align-items: center; overflow: hidden; }
+  .gd-hero-bg { position: absolute; inset: 0; animation: gdZoomOut 1.8s ease-out both; }
+  .gd-hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+  .gd-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, var(--gd-bg), rgba(13,13,13,0.8), transparent); }
+  .gd-hero-content { position: relative; max-width: 580px; }
+  .gd-hero-subtitle { color: var(--gd-primary); font-family: var(--gd-font-display); letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.875rem; margin-bottom: 1rem; animation: gdFadeInLeft 0.6s ease-out 0.4s both; }
+  .gd-hero-title { font-size: clamp(3rem, 8vw, 5rem); font-weight: 700; margin-bottom: 1.5rem; animation: gdFadeInUp 0.7s ease-out 0.6s both; }
+  .gd-hero-title .gd-highlight { color: var(--gd-primary); text-shadow: var(--gd-neon-glow); display: inline-block; animation: gdScaleIn 0.5s ease-out 1s both; }
+  .gd-hero-text { color: var(--gd-muted); font-size: 1.125rem; margin-bottom: 2rem; line-height: 1.7; animation: gdFadeInUp 0.6s ease-out 1.2s both; }
+  .gd-hero-cta { animation: gdFadeInUp 0.6s ease-out 1.5s both; }
+
+  /* Features Strip */
+  .gd-features { border-top: 1px solid var(--gd-border); border-bottom: 1px solid var(--gd-border); padding: 1.5rem 0; }
+  .gd-features .gd-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .gd-features .gd-item { display: flex; align-items: center; gap: 0.75rem; justify-content: center; font-size: 0.875rem; font-weight: 500; }
+  .gd-features .gd-item svg { color: var(--gd-primary); width: 20px; height: 20px; }
+
+  /* Section */
+  .gd-section { padding: 5rem 0; }
+  .gd-section-label { color: var(--gd-primary); font-family: var(--gd-font-display); letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 0.5rem; }
+  .gd-section-title { font-family: var(--gd-font-display); font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; }
+
+  /* Product Card */
+  .gd-product-card { display: block; }
+  .gd-product-card .gd-image-wrap { position: relative; overflow: hidden; border-radius: var(--gd-radius); background: rgba(255,255,255,0.03); aspect-ratio: 1; }
+  .gd-product-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+  .gd-product-card:hover img { transform: scale(1.1); }
+  .gd-product-card .gd-badge { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 700; border-radius: 4px; }
+  .gd-badge-promo { background: var(--gd-primary); color: var(--gd-bg); }
+  .gd-badge-best { background: var(--gd-fg); color: var(--gd-bg); }
+  .gd-product-card .gd-hover-overlay { position: absolute; inset: 0; background: rgba(13,13,13,0.6); opacity: 0; transition: opacity 0.3s; display: flex; align-items: center; justify-content: center; }
+  .gd-product-card:hover .gd-hover-overlay { opacity: 1; }
+  .gd-product-card .gd-hover-overlay span { font-family: var(--gd-font-display); font-size: 0.875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gd-primary); border: 1px solid var(--gd-primary); padding: 0.5rem 1rem; border-radius: 4px; }
+  .gd-product-card .gd-info { margin-top: 0.75rem; }
+  .gd-product-card .gd-brand { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gd-muted); }
+  .gd-product-card .gd-name { font-size: 0.875rem; font-weight: 500; margin-top: 0.25rem; transition: color 0.3s; }
+  .gd-product-card:hover .gd-name { color: var(--gd-primary); }
+  .gd-product-card .gd-price { font-family: var(--gd-font-display); font-size: 1.125rem; color: var(--gd-primary); text-shadow: var(--gd-neon-glow); margin-top: 0.25rem; }
+  .gd-product-card .gd-price-old { font-size: 0.875rem; color: var(--gd-muted); text-decoration: line-through; margin-left: 0.5rem; }
+  .gd-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+  /* Promo Banner */
+  .gd-promo { position: relative; text-align: center; overflow: hidden; }
+  .gd-promo .gd-promo-title { font-size: clamp(2rem, 6vw, 4rem); font-weight: 700; }
+
+  /* Testimonial */
+  .gd-testimonial { background: var(--gd-glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--gd-glass-border); border-radius: var(--gd-radius); padding: 1.5rem; }
+  .gd-testimonial .gd-stars { display: flex; gap: 0.25rem; margin-bottom: 0.75rem; }
+  .gd-testimonial .gd-stars svg { width: 16px; height: 16px; fill: var(--gd-primary); color: var(--gd-primary); }
+  .gd-testimonial .gd-text { font-size: 0.875rem; line-height: 1.6; margin-bottom: 1rem; }
+  .gd-testimonial .gd-author { font-weight: 500; font-size: 0.875rem; }
+  .gd-testimonial .gd-city { font-size: 0.75rem; color: var(--gd-muted); }
+
+  /* Cart Drawer */
+  .gd-cart-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,0.6); opacity: 0; visibility: hidden; transition: all 0.3s; }
+  .gd-cart-overlay.gd-open { opacity: 1; visibility: visible; }
+  .gd-cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 70; width: 100%; max-width: 420px; background: var(--gd-card-bg); border-left: 1px solid var(--gd-border); transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
+  .gd-cart-drawer.gd-open { transform: translateX(0); }
+  .gd-cart-drawer .gd-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--gd-border); font-family: var(--gd-font-display); font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .gd-cart-drawer .gd-items { padding: 1.5rem; flex: 1; overflow-y: auto; }
+  .gd-cart-drawer .gd-footer { padding: 1.5rem; border-top: 1px solid var(--gd-border); }
+  .gd-cart-drawer .gd-total { display: flex; justify-content: space-between; font-family: var(--gd-font-display); font-size: 1.25rem; margin-bottom: 1rem; }
+
+  /* Footer */
+  .gd-footer { border-top: 1px solid var(--gd-border); padding: 3rem 0 1.5rem; color: var(--gd-muted); font-size: 0.875rem; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .gd-features .gd-grid { grid-template-columns: 1fr; }
+    .gd-products-grid { grid-template-columns: repeat(2, 1fr); }
+    .gd-hero-title { font-size: 2.5rem; }
+    .gd-nav-links-desktop { display: none !important; }
+    .gd-menu-toggle { display: block !important; }
+  }
+  @media (max-width: 480px) {
+    .gd-products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="gd-wrapper">
+
+  <!-- ══════════ NAVBAR ══════════ -->
+  <nav class="gd-navbar">
+    <div class="gd-container gd-inner">
+      <a href="/" class="gd-logo"><span class="gd-neon-text">GO</span>DASSES</a>
+
+      <div class="gd-nav-links-desktop" style="display:flex;align-items:center;gap:2rem;">
+        <a href="/" class="gd-nav-link active">Accueil</a>
+        <a href="/collections/all" class="gd-nav-link">Boutique</a>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <a href="/cart" style="position:relative;color:var(--gd-fg);" aria-label="Panier">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="gd-cart-badge">{{ cart.item_count }}</span>
+        </a>
+        <button class="gd-menu-toggle" style="display:none;background:none;border:none;color:var(--gd-fg);cursor:pointer;" aria-label="Menu" onclick="document.querySelector('.gd-mobile-menu').classList.toggle('gd-open');this.querySelector('.gd-icon-open').classList.toggle('gd-hidden');this.querySelector('.gd-icon-close').classList.toggle('gd-hidden');">
+          <svg class="gd-icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg class="gd-icon-close gd-hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="gd-mobile-menu" style="max-height:0;overflow:hidden;transition:max-height .3s ease;">
+      <div style="padding:1rem;">
+        <a href="/" class="gd-nav-link" style="display:block;padding:.5rem 0;">Accueil</a>
+        <a href="/collections/all" class="gd-nav-link" style="display:block;padding:.5rem 0;">Boutique</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="gd-hero">
+    <div class="gd-hero-bg">
+      {% if section.settings.hero_image != blank %}
+        <img src="{{ section.settings.hero_image | image_url: width: 1600 }}" alt="{{ section.settings.hero_title | escape }}" loading="eager" />
+      {% else %}
+        <img src="https://images.unsplash.com/photo-1511886929837-354d827aae26?w=1600&q=80" alt="Chaussures de football" />
+      {% endif %}
+      <div class="gd-hero-overlay"></div>
+    </div>
+    <div class="gd-container gd-hero-content">
+      <p class="gd-hero-subtitle">{{ section.settings.hero_subtitle | default: 'Nouvelle collection 2026' }}</p>
+      <h1 class="gd-hero-title">
+        {{ section.settings.hero_title_line1 | default: 'Domine le' }}<br />
+        <span class="gd-highlight">{{ section.settings.hero_title_highlight | default: 'terrain' }}</span>
+      </h1>
+      <p class="gd-hero-text">{{ section.settings.hero_text | default: 'Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc.' }}</p>
+      <div class="gd-hero-cta">
+        <a href="{{ section.settings.hero_cta_link | default: '/collections/all' }}" class="gd-btn gd-btn-primary gd-neon-glow">
+          {{ section.settings.hero_cta_text | default: 'Voir la boutique' }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FEATURES STRIP ══════════ -->
+  <section class="gd-features gd-reveal">
+    <div class="gd-container">
+      <div class="gd-grid">
+        <div class="gd-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7h8m0 0v8m0-8-8 8-4-4-6 6"/></svg>
+          Livraison partout au Maroc
+        </div>
+        <div class="gd-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+          100% Authentique
+        </div>
+        <div class="gd-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Retours sous 14 jours
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ BEST SELLERS (Produits Shopify) ══════════ -->
+  <section class="gd-section gd-reveal">
+    <div class="gd-container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;">
+        <div>
+          <p class="gd-section-label">Populaire</p>
+          <h2 class="gd-section-title">Best Sellers</h2>
+        </div>
+        <a href="/collections/all" class="gd-nav-link" style="font-size:.875rem;display:flex;align-items:center;gap:.25rem;">
+          Tout voir
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="gd-products-grid">
+        {% assign collection_handle = section.settings.featured_collection | default: 'all' %}
+        {% assign product_limit = section.settings.products_count | default: 6 %}
+        {% for product in collections[collection_handle].products limit: product_limit %}
+          <a href="{{ product.url }}" class="gd-product-card">
+            <div class="gd-image-wrap">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy" />
+              {% else %}
+                <img src="https://via.placeholder.com/600x600/141414/8c8c8c?text=No+Image" alt="{{ product.title | escape }}" />
+              {% endif %}
+
+              {% if product.compare_at_price > product.price %}
+                {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+                <span class="gd-badge gd-badge-promo">-{{ discount }}%</span>
+              {% endif %}
+
+              <div class="gd-hover-overlay"><span>Voir le produit</span></div>
+            </div>
+            <div class="gd-info">
+              <p class="gd-brand">{{ product.vendor }}</p>
+              <p class="gd-name">{{ product.title }}</p>
+              <div style="display:flex;align-items:center;gap:.5rem;">
+                <span class="gd-price">{{ product.price | money }}</span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="gd-price-old">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <p style="color:var(--gd-muted);grid-column:1/-1;text-align:center;">Aucun produit trouvé. Ajoutez des produits à votre collection.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PROMO BANNER ══════════ -->
+  <section class="gd-section gd-promo gd-reveal">
+    <div class="gd-gradient-radial" style="position:absolute;inset:0;"></div>
+    <div class="gd-container" style="position:relative;">
+      <p class="gd-section-label" style="text-align:center;">Offre limitée</p>
+      <h2 class="gd-promo-title" style="text-align:center;">
+        Jusqu'à <span class="gd-neon-text">-25%</span>
+      </h2>
+      <p style="text-align:center;color:var(--gd-muted);max-width:28rem;margin:1rem auto 2rem;">
+        Profitez de nos promotions exceptionnelles sur une sélection de chaussures de football.
+      </p>
+      <div style="text-align:center;">
+        <a href="/collections/all" class="gd-btn gd-btn-primary gd-neon-glow">Voir les promos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TESTIMONIALS ══════════ -->
+  <section class="gd-section gd-reveal">
+    <div class="gd-container">
+      <div style="text-align:center;margin-bottom:3rem;">
+        <p class="gd-section-label">Avis clients</p>
+        <h2 class="gd-section-title">Ce qu'ils disent</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;">
+        {% for block in section.blocks %}
+          {% if block.type == 'testimonial' %}
+            <div class="gd-testimonial">
+              <div class="gd-stars">
+                {% for i in (1..5) %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {% endfor %}
+              </div>
+              <p class="gd-text">"{{ block.settings.text }}"</p>
+              <p class="gd-author">{{ block.settings.author }}</p>
+              <p class="gd-city">{{ block.settings.city }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="gd-footer">
+    <div class="gd-container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2.5rem;">
+        <div>
+          <span class="gd-logo" style="font-family:var(--gd-font-display);font-size:1.5rem;font-weight:700;letter-spacing:.1em;">
+            <span class="gd-neon-text">GO</span>DASSES
+          </span>
+          <p style="margin-top:.75rem;font-size:.875rem;color:var(--gd-muted);line-height:1.6;">
+            Votre destination premium pour les chaussures de football au Maroc. Livraison rapide partout au Maroc 🇲🇦
+          </p>
+        </div>
+        <div>
+          <h4 style="font-family:var(--gd-font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Navigation</h4>
+          <a href="/" style="display:block;font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">Accueil</a>
+          <a href="/collections/all" style="display:block;font-size:.875rem;color:var(--gd-muted);">Boutique</a>
+        </div>
+        <div>
+          <h4 style="font-family:var(--gd-font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Aide</h4>
+          <a href="/pages/guide-tailles" style="display:block;font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">Guide des tailles</a>
+          <a href="/pages/livraison" style="display:block;font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">Livraison & Retours</a>
+          <a href="/pages/faq" style="display:block;font-size:.875rem;color:var(--gd-muted);">FAQ</a>
+        </div>
+        <div>
+          <h4 style="font-family:var(--gd-font-display);text-transform:uppercase;letter-spacing:.15em;font-size:.875rem;margin-bottom:1rem;">Contact</h4>
+          <p style="font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">contact@godasses.ma</p>
+          <p style="font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">+212 6 00 00 00 00</p>
+          <p style="font-size:.875rem;color:var(--gd-muted);">Casablanca, Maroc</p>
+        </div>
+      </div>
+      <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--gd-border);text-align:center;font-size:.75rem;color:var(--gd-muted);">
+        © {{ 'now' | date: '%Y' }} GODASSES.MA — Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<style>.gd-hidden { display: none !important; }</style>
+<style>.gd-mobile-menu.gd-open { max-height: 200px !important; }</style>
+
+<script>
+  /* Scroll Reveal */
+  document.addEventListener('DOMContentLoaded', function() {
+    var els = document.querySelectorAll('.gd-reveal');
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('gd-revealed'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(function(el) { obs.observe(el); });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Godasses Homepage",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Image Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_subtitle",
+      "label": "Sous-titre Hero",
+      "default": "Nouvelle collection 2026"
+    },
+    {
+      "type": "text",
+      "id": "hero_title_line1",
+      "label": "Titre ligne 1",
+      "default": "Domine le"
+    },
+    {
+      "type": "text",
+      "id": "hero_title_highlight",
+      "label": "Mot en surbrillance",
+      "default": "terrain"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_text",
+      "label": "Texte Hero",
+      "default": "Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_text",
+      "label": "Bouton CTA texte",
+      "default": "Voir la boutique"
+    },
+    {
+      "type": "url",
+      "id": "hero_cta_link",
+      "label": "Bouton CTA lien",
+      "default": "/collections/all"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Collection à afficher"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Nombre de produits"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Avis client",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte de l'avis",
+          "default": "Qualité incroyable, livraison rapide!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Nom",
+          "default": "Client"
+        },
+        {
+          "type": "text",
+          "id": "city",
+          "label": "Ville",
+          "default": "Casablanca"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Godasses Homepage",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "text": "Qualité incroyable, livraison rapide! Mes Mercurial sont parfaites.",
+            "author": "Youssef B.",
+            "city": "Casablanca"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "text": "Meilleur store de foot au Maroc, je recommande à 100%!",
+            "author": "Amine K.",
+            "city": "Rabat"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "text": "Super service client, les chaussures sont authentiques.",
+            "author": "Omar H.",
+            "city": "Marrakech"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
