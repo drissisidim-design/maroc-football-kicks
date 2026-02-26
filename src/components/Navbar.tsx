@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, Heart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const totalItems = useCartStore((s) => s.totalItems());
   const openCart = useCartStore((s) => s.openCart);
+  const wishlistCount = useWishlistStore((s) => s.items.length);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
   const links = [
     { to: "/", label: "Accueil" },
     { to: "/boutique", label: "Boutique" },
+    { to: "/a-propos", label: "À propos" },
+    { to: "/contact", label: "Contact" },
   ];
 
   return (
@@ -37,7 +41,15 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Link to="/wishlist" className="relative p-2 transition-colors hover:text-primary" aria-label="Wishlist">
+            <Heart className="w-5 h-5" />
+            {wishlistCount > 0 && (
+              <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-xs font-bold flex items-center justify-center">
+                {wishlistCount}
+              </motion.span>
+            )}
+          </Link>
           <button
             onClick={openCart}
             className="relative p-2 transition-colors hover:text-primary"

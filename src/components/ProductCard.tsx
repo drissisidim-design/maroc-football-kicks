@@ -1,8 +1,9 @@
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
+import { useWishlistStore } from "@/stores/wishlistStore";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Loader2 } from "lucide-react";
+import { ShoppingBag, Loader2, Heart } from "lucide-react";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -15,11 +16,11 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const openCart = useCartStore((s) => s.openCart);
+  const toggleFav = useWishlistStore((s) => s.toggle);
+  const isFav = useWishlistStore((s) => s.isFavorite(node.handle));
 
   const price = parseFloat(node.priceRange.minVariantPrice.amount);
-  const compareAt = node.compareAtPriceRange
-    ? parseFloat(node.compareAtPriceRange.maxVariantPrice.amount)
-    : 0;
+  const compareAt = node.compareAtPriceRange ? parseFloat(node.compareAtPriceRange.maxVariantPrice.amount) : 0;
   const hasDiscount = compareAt > price;
   const discount = hasDiscount ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
   const currency = node.priceRange.minVariantPrice.currencyCode;
@@ -42,6 +43,13 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     openCart();
   };
 
+  const handleToggleFav = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFav(node.handle);
+    toast(isFav ? "Retiré des favoris" : "Ajouté aux favoris ❤️");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -59,9 +67,7 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-              No image
-            </div>
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">No image</div>
           )}
 
           {hasDiscount && (
@@ -69,6 +75,15 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               -{discount}%
             </span>
           )}
+
+          {/* Wishlist heart */}
+          <button
+            onClick={handleToggleFav}
+            className="absolute top-3 right-3 p-2 rounded-full bg-background/60 backdrop-blur-sm hover:bg-background/80 transition-colors z-10"
+            aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+          >
+            <Heart className={`w-4 h-4 transition-colors ${isFav ? "fill-destructive text-destructive" : "text-foreground"}`} />
+          </button>
 
           <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
             <span className="font-display text-sm tracking-widest uppercase text-primary border border-primary px-4 py-2 rounded">
@@ -87,17 +102,11 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         </div>
 
         <div className="mt-3 space-y-1">
-          <h3 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
-            {node.title}
-          </h3>
+          <h3 className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">{node.title}</h3>
           <div className="flex items-center gap-2">
-            <span className="font-display text-lg neon-text">
-              {price.toFixed(2)} {currency}
-            </span>
+            <span className="font-display text-lg neon-text">{price.toFixed(2)} {currency}</span>
             {hasDiscount && (
-              <span className="text-sm text-muted-foreground line-through">
-                {compareAt.toFixed(2)} {currency}
-              </span>
+              <span className="text-sm text-muted-foreground line-through">{compareAt.toFixed(2)} {currency}</span>
             )}
           </div>
         </div>
