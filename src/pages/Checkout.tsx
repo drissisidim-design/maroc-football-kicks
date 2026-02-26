@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2, ShoppingBag, ExternalLink } from "lucide-react";
+import { ArrowLeft, Loader2, ShoppingBag, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore } from "@/stores/cartStore";
@@ -19,10 +19,11 @@ const checkoutSchema = z.object({
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items, cartId, getCheckoutUrl } = useCartStore();
+  const { items, cartId, clearCart } = useCartStore();
   const totalPrice = useCartStore((s) => s.totalPrice());
   const totalItems = useCartStore((s) => s.totalItems());
   const [loading, setLoading] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [form, setForm] = useState({
@@ -37,6 +38,22 @@ const Checkout = () => {
     setForm((f) => ({ ...f, [field]: value }));
     setErrors((e) => ({ ...e, [field]: "" }));
   };
+
+  if (orderSuccess) {
+    return (
+      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center max-w-md mx-auto px-4">
+          <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
+          <h1 className="font-display text-3xl font-bold uppercase mb-3">Commande confirmée !</h1>
+          <p className="text-muted-foreground mb-2">Merci pour votre commande.</p>
+          <p className="text-muted-foreground text-sm mb-6">Nous vous contacterons bientôt pour confirmer la livraison.</p>
+          <Button onClick={() => navigate("/boutique")} variant="outline">
+            Retour à la boutique
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -73,9 +90,7 @@ const Checkout = () => {
 
     setLoading(true);
     try {
-      // Update buyer identity on Shopify cart
       let phoneClean = form.phone.replace(/[\s()-]/g, '');
-      // Convert local Moroccan numbers to E.164 format
       if (phoneClean.startsWith('0')) {
         phoneClean = '+212' + phoneClean.slice(1);
       } else if (!phoneClean.startsWith('+')) {
@@ -101,17 +116,13 @@ const Checkout = () => {
         return;
       }
 
-      // Add note with phone number
-      await updateCartNote(cartId, `Commande via godasses.ma — Tel: ${form.phone}`);
+      // Add detailed note for merchant to contact the client
+      const itemsSummary = items.map(i => `${i.product.node.title} x${i.quantity}`).join(', ');
+      await updateCartNote(cartId, `🛒 Commande via godasses.ma\n📞 Tel: ${form.phone}\n👤 ${form.firstName} ${form.lastName}\n📍 ${form.address1}, ${form.city}\n📦 Articles: ${itemsSummary}\n💰 Total: ${totalPrice.toFixed(2)} MAD`);
 
-      // Redirect to Shopify checkout
-      const checkoutUrl = identityResult.checkoutUrl || getCheckoutUrl();
-      if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
-        toast.success("Redirection vers le paiement Shopify...");
-      } else {
-        toast.error("Erreur", { description: "URL de paiement introuvable." });
-      }
+      setOrderSuccess(true);
+      clearCart();
+      toast.success("Commande confirmée !");
     } catch (err) {
       console.error("Checkout error:", err);
       toast.error("Erreur", { description: "Une erreur est survenue. Veuillez réessayer." });
@@ -208,14 +219,11 @@ const Checkout = () => {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              <>
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Passer au paiement
-              </>
+              "Confirmer la commande"
             )}
           </Button>
           <p className="text-xs text-muted-foreground text-center">
-            Vous serez redirigé vers Shopify pour finaliser le paiement
+            Paiement à la livraison — Nous vous contacterons pour confirmer
           </p>
         </motion.form>
       </div>
