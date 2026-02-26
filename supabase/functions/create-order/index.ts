@@ -44,9 +44,9 @@ serve(async (req) => {
       });
     }
 
-    // Create draft order via Shopify Admin API
-    const draftOrderPayload = {
-      draft_order: {
+    // Create order via Shopify Admin API
+    const orderPayload = {
+      order: {
         line_items: items.map((item) => ({
           variant_id: extractNumericId(item.variantId),
           quantity: item.quantity,
@@ -61,21 +61,34 @@ serve(async (req) => {
           zip: '00000',
           phone: phone,
         },
+        billing_address: {
+          first_name: firstName,
+          last_name: lastName,
+          address1: address1,
+          city: city,
+          country: 'Morocco',
+          country_code: 'MA',
+          zip: '00000',
+          phone: phone,
+        },
         note: `Commande via godasses.ma — Tel: ${phone}`,
         tags: 'godasses-website,COD',
         email: `${phone.replace(/[\s+()-]/g, '')}@godasses.ma`,
+        financial_status: 'pending',
+        send_receipt: false,
+        send_fulfillment_receipt: false,
       },
     };
 
     const shopifyRes = await fetch(
-      `https://${SHOPIFY_STORE}/admin/api/${SHOPIFY_API_VERSION}/draft_orders.json`,
+      `https://${SHOPIFY_STORE}/admin/api/${SHOPIFY_API_VERSION}/orders.json`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Shopify-Access-Token': SHOPIFY_ACCESS_TOKEN,
         },
-        body: JSON.stringify(draftOrderPayload),
+        body: JSON.stringify(orderPayload),
       }
     );
 
@@ -88,12 +101,12 @@ serve(async (req) => {
       });
     }
 
-    const draftOrder = shopifyData.draft_order;
+    const order = shopifyData.order;
 
     return new Response(JSON.stringify({
       success: true,
-      orderId: draftOrder.id,
-      orderName: draftOrder.name,
+      orderId: order.id,
+      orderName: order.name,
     }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
