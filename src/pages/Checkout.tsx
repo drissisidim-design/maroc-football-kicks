@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2, ShoppingBag, CheckCircle } from "lucide-react";
+import { ArrowLeft, Loader2, ShoppingBag, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore } from "@/stores/cartStore";
-import { supabase } from "@/integrations/supabase/client";
+import { updateCartBuyerIdentity, updateCartNote } from "@/lib/shopify";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -19,11 +19,10 @@ const checkoutSchema = z.object({
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { items, clearCart } = useCartStore();
+  const { items, cartId, getCheckoutUrl } = useCartStore();
   const totalPrice = useCartStore((s) => s.totalPrice());
   const totalItems = useCartStore((s) => s.totalItems());
   const [loading, setLoading] = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [form, setForm] = useState({
@@ -38,22 +37,6 @@ const Checkout = () => {
     setForm((f) => ({ ...f, [field]: value }));
     setErrors((e) => ({ ...e, [field]: "" }));
   };
-
-  if (orderSuccess) {
-    return (
-      <div className="min-h-screen pt-24 pb-16 flex items-center justify-center">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center max-w-md mx-auto px-4">
-          <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-          <h1 className="font-display text-3xl font-bold uppercase mb-3">Commande confirmée !</h1>
-          <p className="text-muted-foreground mb-2">Merci pour votre commande <span className="font-bold text-foreground">{orderSuccess}</span></p>
-          <p className="text-muted-foreground text-sm mb-6">Nous vous contacterons bientôt pour confirmer la livraison.</p>
-          <Button onClick={() => navigate("/boutique")} variant="outline">
-            Retour à la boutique
-          </Button>
-        </motion.div>
-      </div>
-    );
-  }
 
   if (items.length === 0) {
     return (
@@ -83,35 +66,45 @@ const Checkout = () => {
       return;
     }
 
+    if (!cartId) {
+      toast.error("Erreur", { description: "Panier introuvable. Veuillez réessayer." });
+      return;
+    }
+
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-order', {
-        body: {
-          firstName: form.firstName,
-          lastName: form.lastName,
-          phone: form.phone,
-          address1: form.address1,
-          city: form.city,
-          items: items.map((item) => ({
-            variantId: item.variantId,
-            quantity: item.quantity,
-          })),
-        },
+      // Update buyer identity on Shopify cart
+      const phoneClean = form.phone.replace(/[\s]/g, '');
+      const fakeEmail = `${phoneClean.replace(/[+()-]/g, '')}@godasses.ma`;
+
+      const identityResult = await updateCartBuyerIdentity(cartId, {
+        email: fakeEmail,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        phone: phoneClean,
+        address1: form.address1,
+        city: form.city,
+        country: 'MA',
+        zip: '00000',
       });
 
-      if (error) {
-        console.error('Order error:', error);
-        toast.error("Erreur", { description: "Impossible de créer la commande. Veuillez réessayer." });
+      if (!identityResult.success) {
+        console.error('Buyer identity error:', identityResult.errors);
+        toast.error("Erreur", { description: "Impossible de mettre à jour les informations. Veuillez réessayer." });
         setLoading(false);
         return;
       }
 
-      if (data?.success) {
-        setOrderSuccess(data.orderName || 'Confirmée');
-        clearCart();
-        toast.success("Commande créée avec succès !");
+      // Add note with phone number
+      await updateCartNote(cartId, `Commande via godasses.ma — Tel: ${form.phone}`);
+
+      // Redirect to Shopify checkout
+      const checkoutUrl = identityResult.checkoutUrl || getCheckoutUrl();
+      if (checkoutUrl) {
+        window.open(checkoutUrl, '_blank');
+        toast.success("Redirection vers le paiement Shopify...");
       } else {
-        toast.error("Erreur", { description: "Impossible de créer la commande. Veuillez réessayer." });
+        toast.error("Erreur", { description: "URL de paiement introuvable." });
       }
     } catch (err) {
       console.error("Checkout error:", err);
@@ -209,9 +202,15 @@ const Checkout = () => {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              "Confirmer la commande"
+              <>
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Passer au paiement
+              </>
             )}
           </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Vous serez redirigé vers Shopify pour finaliser le paiement
+          </p>
         </motion.form>
       </div>
     </div>
