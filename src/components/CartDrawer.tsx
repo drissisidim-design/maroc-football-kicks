@@ -1,22 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, Trash2, ExternalLink, Loader2, ShoppingBag } from "lucide-react";
+import { X, Plus, Minus, Trash2, ArrowRight, Loader2, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 
 const CartDrawer = () => {
-  const { items, isOpen, closeCart, removeItem, updateQuantity, isLoading, isSyncing, getCheckoutUrl, syncCart } = useCartStore();
+  const navigate = useNavigate();
+  const { items, isOpen, closeCart, removeItem, updateQuantity, isLoading, isSyncing, syncCart } = useCartStore();
   const totalPrice = useCartStore((s) => s.totalPrice());
   const totalItems = useCartStore((s) => s.totalItems());
 
   useEffect(() => { if (isOpen) syncCart(); }, [isOpen, syncCart]);
 
   const handleCheckout = () => {
-    const url = getCheckoutUrl();
-    if (url) {
-      window.open(url, '_blank');
-      closeCart();
-    }
+    closeCart();
+    navigate("/commande");
   };
 
   return (
@@ -127,7 +126,7 @@ const CartDrawer = () => {
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <ExternalLink className="w-4 h-4 mr-2" /> Commander
+                      <ArrowRight className="w-4 h-4 mr-2" /> Passer la commande
                     </>
                   )}
                 </Button>
