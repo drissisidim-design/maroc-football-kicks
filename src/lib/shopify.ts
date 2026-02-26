@@ -3,7 +3,7 @@ import { toast } from "sonner";
 const SHOPIFY_API_VERSION = '2025-07';
 const SHOPIFY_STORE_PERMANENT_DOMAIN = 'football-store-morocco-j8f33.myshopify.com';
 const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-const SHOPIFY_STOREFRONT_TOKEN = 'dc032e7959f483277ad86fc247ccabe0';
+const SHOPIFY_STOREFRONT_TOKEN = '082406ce4cbb6061a2eff1f0e648a02b';
 
 export interface ShopifyProduct {
   node: {
