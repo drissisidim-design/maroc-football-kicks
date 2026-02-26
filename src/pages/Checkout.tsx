@@ -128,20 +128,6 @@ const Checkout = () => {
     }
   };
 
-  const InputField = ({ label, field, type = "text", placeholder, required = true }: { label: string; field: string; type?: string; placeholder: string; required?: boolean }) => (
-    <div>
-      <label className="block text-sm font-medium mb-1.5">{label} {required && <span className="text-destructive">*</span>}</label>
-      <Input
-        type={type}
-        value={(form as Record<string, string>)[field]}
-        onChange={(e) => update(field, e.target.value)}
-        placeholder={placeholder}
-        className="h-11"
-      />
-      {errors[field] && <p className="text-destructive text-xs mt-1">{errors[field]}</p>}
-    </div>
-  );
-
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="container mx-auto px-4">
@@ -175,10 +161,26 @@ const Checkout = () => {
                 <h2 className="font-display uppercase tracking-wider text-sm">Informations personnelles</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InputField label="Prénom" field="firstName" placeholder="Votre prénom" />
-                <InputField label="Nom" field="lastName" placeholder="Votre nom" />
-                <InputField label="Email" field="email" type="email" placeholder="votre@email.com" />
-                <InputField label="Téléphone" field="phone" type="tel" placeholder="+212 6XX XXX XXX" />
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Prénom <span className="text-destructive">*</span></label>
+                  <Input value={form.firstName} onChange={(e) => update("firstName", e.target.value)} placeholder="Votre prénom" className="h-11" />
+                  {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Nom <span className="text-destructive">*</span></label>
+                  <Input value={form.lastName} onChange={(e) => update("lastName", e.target.value)} placeholder="Votre nom" className="h-11" />
+                  {errors.lastName && <p className="text-destructive text-xs mt-1">{errors.lastName}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Email <span className="text-destructive">*</span></label>
+                  <Input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="votre@email.com" className="h-11" />
+                  {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Téléphone <span className="text-destructive">*</span></label>
+                  <Input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="+212 6XX XXX XXX" className="h-11" />
+                  {errors.phone && <p className="text-destructive text-xs mt-1">{errors.phone}</p>}
+                </div>
               </div>
             </div>
 
@@ -191,8 +193,15 @@ const Checkout = () => {
                 <h2 className="font-display uppercase tracking-wider text-sm">Adresse de livraison</h2>
               </div>
               <div className="space-y-4">
-                <InputField label="Adresse" field="address1" placeholder="Rue, numéro, quartier" />
-                <InputField label="Complément d'adresse" field="address2" placeholder="Appartement, étage... (optionnel)" required={false} />
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Adresse <span className="text-destructive">*</span></label>
+                  <Input value={form.address1} onChange={(e) => update("address1", e.target.value)} placeholder="Rue, numéro, quartier" className="h-11" />
+                  {errors.address1 && <p className="text-destructive text-xs mt-1">{errors.address1}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Complément d'adresse</label>
+                  <Input value={form.address2} onChange={(e) => update("address2", e.target.value)} placeholder="Appartement, étage... (optionnel)" className="h-11" />
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1.5">Ville <span className="text-destructive">*</span></label>
@@ -208,7 +217,11 @@ const Checkout = () => {
                     </Select>
                     {errors.city && <p className="text-destructive text-xs mt-1">{errors.city}</p>}
                   </div>
-                  <InputField label="Code postal" field="zip" placeholder="20000" />
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Code postal <span className="text-destructive">*</span></label>
+                    <Input value={form.zip} onChange={(e) => update("zip", e.target.value)} placeholder="20000" className="h-11" />
+                    {errors.zip && <p className="text-destructive text-xs mt-1">{errors.zip}</p>}
+                  </div>
                 </div>
               </div>
             </div>
