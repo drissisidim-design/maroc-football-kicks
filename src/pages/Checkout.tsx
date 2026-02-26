@@ -74,8 +74,14 @@ const Checkout = () => {
     setLoading(true);
     try {
       // Update buyer identity on Shopify cart
-      const phoneClean = form.phone.replace(/[\s]/g, '');
-      const fakeEmail = `${phoneClean.replace(/[+()-]/g, '')}@godasses.ma`;
+      let phoneClean = form.phone.replace(/[\s()-]/g, '');
+      // Convert local Moroccan numbers to E.164 format
+      if (phoneClean.startsWith('0')) {
+        phoneClean = '+212' + phoneClean.slice(1);
+      } else if (!phoneClean.startsWith('+')) {
+        phoneClean = '+212' + phoneClean;
+      }
+      const fakeEmail = `${phoneClean.replace(/[+]/g, '')}@godasses.ma`;
 
       const identityResult = await updateCartBuyerIdentity(cartId, {
         email: fakeEmail,
