@@ -39,7 +39,6 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       quantity: 1,
       selectedOptions: firstVariant.selectedOptions || [],
     });
-    toast.success("Ajouté au panier !");
     openCart();
   };
 

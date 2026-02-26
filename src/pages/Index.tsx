@@ -22,7 +22,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center overflow-hidden">
+      <section className="relative h-[80vh] md:h-screen flex items-center overflow-hidden">
         <motion.div
           className="absolute inset-0"
           initial={{ scale: 1.2 }}
