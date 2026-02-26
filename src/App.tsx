@@ -18,6 +18,7 @@ const About = lazy(() => import("./pages/About"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Shipping = lazy(() => import("./pages/Shipping"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
+const Checkout = lazy(() => import("./pages/Checkout"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const AppContent = () => {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/livraison" element={<Shipping />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/commande" element={<Checkout />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

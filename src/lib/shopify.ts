@@ -201,8 +201,29 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
   return data?.data?.productByHandle || null;
 }
 
-// Cart mutations
+// Cart queries and mutations
 const CART_QUERY = `query cart($id: ID!) { cart(id: $id) { id totalQuantity } }`;
+
+const CART_BUYER_IDENTITY_UPDATE = `
+  mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        id
+        checkoutUrl
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_NOTE_UPDATE = `
+  mutation cartNoteUpdate($cartId: ID!, $note: String!) {
+    cartNoteUpdate(cartId: $cartId, note: $note) {
+      cart { id }
+      userErrors { field message }
+    }
+  }
+`;
 
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
@@ -319,4 +340,55 @@ export async function syncShopifyCart(cartId: string) {
   const data = await storefrontApiRequest(CART_QUERY, { id: cartId });
   if (!data) return null;
   return data?.data?.cart;
+}
+
+export interface BuyerInfo {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  province?: string;
+  country: string;
+  zip: string;
+}
+
+export async function updateCartBuyerIdentity(cartId: string, buyer: BuyerInfo) {
+  const data = await storefrontApiRequest(CART_BUYER_IDENTITY_UPDATE, {
+    cartId,
+    buyerIdentity: {
+      email: buyer.email,
+      phone: buyer.phone,
+      deliveryAddressPreferences: [
+        {
+          deliveryAddress: {
+            firstName: buyer.firstName,
+            lastName: buyer.lastName,
+            address1: buyer.address1,
+            address2: buyer.address2 || '',
+            city: buyer.city,
+            province: buyer.province || '',
+            country: buyer.country,
+            zip: buyer.zip,
+            phone: buyer.phone,
+          },
+        },
+      ],
+    },
+  });
+  const userErrors = data?.data?.cartBuyerIdentityUpdate?.userErrors || [];
+  if (userErrors.length > 0) return { success: false, errors: userErrors };
+  const checkoutUrl = data?.data?.cartBuyerIdentityUpdate?.cart?.checkoutUrl;
+  return { success: true, checkoutUrl: checkoutUrl ? formatCheckoutUrl(checkoutUrl) : null };
+}
+
+export async function updateCartNote(cartId: string, note: string) {
+  const data = await storefrontApiRequest(CART_NOTE_UPDATE, {
+    cartId,
+    note,
+  });
+  const userErrors = data?.data?.cartNoteUpdate?.userErrors || [];
+  return { success: userErrors.length === 0 };
 }
