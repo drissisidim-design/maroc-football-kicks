@@ -13,7 +13,7 @@ const Footer = () => (
             Godasses.ma — Votre destination N°1 pour les chaussures de football authentiques au Maroc 🇲🇦
           </p>
           <div className="flex gap-3 mt-4">
-            <a href="https://instagram.com/godasses.ma" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
+            <a href="https://instagram.com/godasses.ma_" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
               <Instagram className="w-4 h-4 text-primary" />
             </a>
             <a href="https://facebook.com/godasses.ma" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
@@ -41,7 +41,7 @@ const Footer = () => (
         <div>
           <h4 className="font-display uppercase tracking-wider text-sm mb-4">Contact</h4>
           <div className="space-y-2 text-sm text-muted-foreground">
-            <a href="mailto:contact@godasses.ma" className="block hover:text-primary transition-colors">contact@godasses.ma</a>
+            <a href="mailto:godasses.ma@gmail.com" className="block hover:text-primary transition-colors">godasses.ma@gmail.com</a>
             <a href="tel:+212600000000" className="block hover:text-primary transition-colors">+212 6 00 00 00 00</a>
             <p>Casablanca, Maroc</p>
           </div>
