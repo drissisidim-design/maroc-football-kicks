@@ -117,31 +117,40 @@ const ProductDetail = () => {
             <p className="text-muted-foreground leading-relaxed mb-8">{product.description}</p>
 
             {/* Options / Variants */}
-            {product.options.map((option) => (
-              <div key={option.name} className="mb-6">
-                <h3 className="font-display uppercase tracking-wider text-sm mb-3">{option.name}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {variants
-                    .filter((v) => v.availableForSale)
-                    .map((variant) => {
-                      const optionValue = variant.selectedOptions.find((o) => o.name === option.name)?.value;
-                      return (
-                        <button
-                          key={variant.id}
-                          onClick={() => setSelectedVariantId(variant.id)}
-                          className={`px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
-                            (selectedVariantId || variants[0]?.id) === variant.id
-                              ? "border-primary bg-primary/10 text-primary neon-border"
-                              : "border-border text-muted-foreground hover:border-primary/50"
-                          }`}
-                        >
-                          {optionValue || variant.title}
-                        </button>
-                      );
-                    })}
-                </div>
-              </div>
-            ))}
+            {product.options
+              .filter((opt) => !(opt.name === "Title" && opt.values.length === 1 && opt.values[0] === "Default Title"))
+              .map((option) => {
+                const currentValue = selectedVariant.selectedOptions.find((o) => o.name === option.name)?.value;
+                return (
+                  <div key={option.name} className="mb-6">
+                    <h3 className="font-display uppercase tracking-wider text-sm mb-3">{option.name}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {option.values.map((value) => {
+                        const matchingVariant = variants.find((v) =>
+                          v.selectedOptions.some((o) => o.name === option.name && o.value === value) && v.availableForSale
+                        );
+                        const isSelected = currentValue === value;
+                        return (
+                          <button
+                            key={value}
+                            onClick={() => matchingVariant && setSelectedVariantId(matchingVariant.id)}
+                            disabled={!matchingVariant}
+                            className={`px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
+                              isSelected
+                                ? "border-primary bg-primary/10 text-primary neon-border"
+                                : matchingVariant
+                                  ? "border-border text-muted-foreground hover:border-primary/50"
+                                  : "border-border text-muted-foreground/40 opacity-50 cursor-not-allowed"
+                            }`}
+                          >
+                            {value}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
 
             <Button
               onClick={handleAddToCart}
