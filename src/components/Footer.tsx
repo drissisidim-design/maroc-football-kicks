@@ -13,7 +13,7 @@ const Footer = () => (
             Godasses.ma — Votre destination N°1 pour les chaussures de football authentiques au Maroc 🇲🇦
           </p>
           <div className="flex gap-3 mt-4">
-            <a href="https://instagram.com/godasses.ma_" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
+            <a href="https://www.instagram.com/godasses.ma?igsh=d29zYnYxOXcwYTdz" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
               <Instagram className="w-4 h-4 text-primary" />
             </a>
             <a href="https://facebook.com/godasses.ma" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
