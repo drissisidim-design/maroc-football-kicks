@@ -102,8 +102,8 @@ const Contact = () => {
               <h3 className="font-display uppercase tracking-wider text-sm mb-4">Coordonnées</h3>
               {[
                 { icon: Mail, label: "Email", value: "godasses.ma@gmail.com", href: "mailto:godasses.ma@gmail.com" },
-                { icon: Phone, label: "Téléphone", value: "+212 6 00 00 00 00", href: "tel:+212600000000" },
-                { icon: MapPin, label: "Adresse", value: "Casablanca, Maroc" },
+                { icon: Phone, label: "Téléphone", value: "06 17 65 13 94", href: "tel:+212617651394" },
+                { icon: MapPin, label: "Adresse", value: "Rabat, Maroc" },
               ].map(({ icon: Icon, label, value, href }) => (
                 <div key={label} className="flex items-start gap-4">
                   <div className="p-2 rounded-lg bg-primary/10">
