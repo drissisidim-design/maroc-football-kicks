@@ -101,7 +101,7 @@ const Contact = () => {
             <div className="glass rounded-lg p-6 space-y-6">
               <h3 className="font-display uppercase tracking-wider text-sm mb-4">Coordonnées</h3>
               {[
-                { icon: Mail, label: "Email", value: "contact@godasses.ma", href: "mailto:contact@godasses.ma" },
+                { icon: Mail, label: "Email", value: "godasses.ma@gmail.com", href: "mailto:godasses.ma@gmail.com" },
                 { icon: Phone, label: "Téléphone", value: "+212 6 00 00 00 00", href: "tel:+212600000000" },
                 { icon: MapPin, label: "Adresse", value: "Casablanca, Maroc" },
               ].map(({ icon: Icon, label, value, href }) => (
@@ -124,7 +124,7 @@ const Contact = () => {
             <div className="glass rounded-lg p-6">
               <h3 className="font-display uppercase tracking-wider text-sm mb-4">Suivez-nous</h3>
               <div className="flex gap-4">
-                <a href="https://instagram.com/godasses.ma" target="_blank" rel="noopener noreferrer" className="p-3 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
+                <a href="https://instagram.com/godasses.ma_" target="_blank" rel="noopener noreferrer" className="p-3 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
                   <Instagram className="w-5 h-5 text-primary" />
                 </a>
                 <a href="https://facebook.com/godasses.ma" target="_blank" rel="noopener noreferrer" className="p-3 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
