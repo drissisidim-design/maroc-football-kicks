@@ -55,7 +55,7 @@ const ProductDetail = () => {
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions || [],
     });
-    navigate("/checkout");
+    navigate("/commande");
   };
 
   return (
