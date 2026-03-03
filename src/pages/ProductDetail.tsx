@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ShoppingBag, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const { data: product, isLoading: productLoading } = useShopifyProduct(handle || "");
   const addItem = useCartStore((s) => s.addItem);
   const cartLoading = useCartStore((s) => s.isLoading);
-  const openCart = useCartStore((s) => s.openCart);
+  const navigate = useNavigate();
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
 
@@ -45,7 +45,7 @@ const ProductDetail = () => {
   const discount = hasDiscount ? Math.round(((compareAt - price) / compareAt) * 100) : 0;
   const images = product.images.edges.map((e) => e.node);
 
-  const handleAddToCart = async () => {
+  const handleBuyNow = async () => {
     if (!selectedVariant) return;
     await addItem({
       product: { node: product },
@@ -55,10 +55,7 @@ const ProductDetail = () => {
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions || [],
     });
-    setAdded(true);
-    toast.success("Ajouté au panier !");
-    openCart();
-    setTimeout(() => setAdded(false), 2000);
+    navigate("/checkout");
   };
 
   return (
@@ -153,24 +150,18 @@ const ProductDetail = () => {
               })}
 
             <Button
-              onClick={handleAddToCart}
+              onClick={handleBuyNow}
               disabled={cartLoading}
               size="lg"
               className="h-14 font-display tracking-widest uppercase text-sm neon-glow"
             >
-              <AnimatePresence mode="wait">
-                {added ? (
-                  <motion.span key="check" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-2">
-                    <Check className="w-5 h-5" /> Ajouté !
-                  </motion.span>
-                ) : cartLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <motion.span key="add" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-2">
-                    <ShoppingBag className="w-5 h-5" /> Ajouter au panier
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {cartLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <span className="flex items-center gap-2">
+                  <ShoppingBag className="w-5 h-5" /> Commander maintenant
+                </span>
+              )}
             </Button>
           </motion.div>
         </div>
