@@ -1,0 +1,24 @@
+{
+  "general": {
+    "currency_symbol": "MAD",
+    "newsletter_success": "Merci pour votre inscription !",
+    "cart_empty": "Votre panier est vide",
+    "add_to_cart": "Ajouter au panier",
+    "sold_out": "Rupture de stock",
+    "view_product": "Voir le produit",
+    "continue_shopping": "Continuer les achats",
+    "checkout": "Commander"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "sold_out": "Rupture de stock",
+      "quantity": "Quantité"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "Aucun produit trouvé"
+    }
+  }
+}

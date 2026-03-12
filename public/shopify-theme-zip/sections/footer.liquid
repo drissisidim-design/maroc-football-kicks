@@ -1,0 +1,47 @@
+<footer class="gd-footer">
+  <div class="gd-container">
+    <div class="gd-footer-grid">
+      <div>
+        <span class="gd-logo" style="font-family:var(--gd-font-display);font-size:1.5rem;font-weight:700;letter-spacing:.1em;">
+          <span class="gd-neon-text">GO</span>DASSES
+        </span>
+        <p style="margin-top:.75rem;font-size:.875rem;color:var(--gd-muted);line-height:1.6;">
+          {{ section.settings.footer_text | default: 'Votre destination premium pour les chaussures de football au Maroc. 🇲🇦' }}
+        </p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <a href="/">Accueil</a>
+        <a href="/collections/all">Boutique</a>
+        <a href="/pages/contact">Contact</a>
+      </div>
+      <div>
+        <h4>Aide</h4>
+        <a href="/pages/guide-tailles">Guide des tailles</a>
+        <a href="/pages/livraison">Livraison & Retours</a>
+        <a href="/pages/faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p style="font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">{{ section.settings.email | default: 'contact@godasses.ma' }}</p>
+        <p style="font-size:.875rem;color:var(--gd-muted);margin-bottom:.5rem;">{{ section.settings.phone | default: '+212 6 00 00 00 00' }}</p>
+        <p style="font-size:.875rem;color:var(--gd-muted);">{{ section.settings.address | default: 'Casablanca, Maroc' }}</p>
+      </div>
+    </div>
+    <div class="gd-footer-bottom">
+      © {{ 'now' | date: '%Y' }} GODASSES.MA — Tous droits réservés.
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "footer_text", "label": "Description", "default": "Votre destination premium pour les chaussures de football au Maroc. 🇲🇦" },
+    { "type": "text", "id": "email", "label": "Email", "default": "contact@godasses.ma" },
+    { "type": "text", "id": "phone", "label": "Téléphone", "default": "+212 6 00 00 00 00" },
+    { "type": "text", "id": "address", "label": "Adresse", "default": "Casablanca, Maroc" }
+  ]
+}
+{% endschema %}

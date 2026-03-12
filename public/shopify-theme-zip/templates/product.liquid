@@ -1,0 +1,85 @@
+<div class="gd-product-page">
+  <div class="gd-container">
+    <div class="gd-product-layout">
+
+      <!-- Gallery -->
+      <div class="gd-product-gallery">
+        {% if product.featured_image %}
+          <img class="gd-main-image" src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" />
+        {% endif %}
+        {% if product.images.size > 1 %}
+          <div class="gd-thumbs">
+            {% for image in product.images %}
+              <div class="gd-thumb {% if forloop.first %}active{% endif %}" data-src="{{ image | image_url: width: 800 }}">
+                <img src="{{ image | image_url: width: 160 }}" alt="{{ product.title | escape }}" />
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Info -->
+      <div>
+        <p class="gd-section-label">{{ product.vendor }}</p>
+        <h1 class="gd-section-title" style="margin-bottom:1rem;">{{ product.title }}</h1>
+
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+          <span style="font-family:var(--gd-font-display);font-size:2rem;color:var(--gd-primary);text-shadow:var(--gd-neon-glow);">{{ product.price | money }}</span>
+          {% if product.compare_at_price > product.price %}
+            <span style="font-size:1.25rem;color:var(--gd-muted);text-decoration:line-through;">{{ product.compare_at_price | money }}</span>
+            {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+            <span class="gd-badge gd-badge-promo" style="font-size:.75rem;">-{{ discount }}%</span>
+          {% endif %}
+        </div>
+
+        {% if product.description != blank %}
+          <div style="color:var(--gd-muted);font-size:.875rem;line-height:1.7;margin-bottom:2rem;">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        <!-- Variants -->
+        {% if product.variants.size > 1 %}
+          {% for option in product.options_with_values %}
+            <div style="margin-bottom:1rem;">
+              <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:var(--gd-muted);margin-bottom:.5rem;">{{ option.name }}</p>
+              <div class="gd-variant-options">
+                {% for value in option.values %}
+                  <button class="gd-variant-btn {% if forloop.first %}active{% endif %}" data-option-group="{{ option.name }}">{{ value }}</button>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- Add to Cart -->
+        <form data-add-to-cart>
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          {% if product.available %}
+            <button type="submit" class="gd-btn gd-btn-primary gd-neon-glow" style="width:100%;justify-content:center;margin-bottom:1rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Ajouter au panier
+            </button>
+          {% else %}
+            <button disabled class="gd-btn gd-btn-outline" style="width:100%;justify-content:center;opacity:.5;cursor:not-allowed;">
+              Rupture de stock
+            </button>
+          {% endif %}
+        </form>
+
+        <!-- Features -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.5rem;">
+          <div class="gd-glass" style="padding:1rem;border-radius:var(--gd-radius);display:flex;align-items:center;gap:.5rem;font-size:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gd-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+            100% Authentique
+          </div>
+          <div class="gd-glass" style="padding:1rem;border-radius:var(--gd-radius);display:flex;align-items:center;gap:.5rem;font-size:.75rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gd-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Retours 14 jours
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
