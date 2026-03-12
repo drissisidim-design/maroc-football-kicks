@@ -1,0 +1,53 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Godasses",
+    "theme_version": "1.0.0",
+    "theme_author": "Godasses.ma",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Couleur primaire",
+        "default": "#00e600"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Couleur de fond",
+        "default": "#0d0d0d"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Couleur du texte",
+        "default": "#f2f2f2"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      }
+    ]
+  }
+]

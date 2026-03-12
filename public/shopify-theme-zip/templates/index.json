@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "homepage": {
+      "type": "godasses-homepage",
+      "blocks": {
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "text": "Qualité incroyable, livraison rapide! Mes Mercurial sont parfaites.",
+            "author": "Youssef B.",
+            "city": "Casablanca"
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "text": "Meilleur store de foot au Maroc, je recommande à 100%!",
+            "author": "Amine K.",
+            "city": "Rabat"
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "text": "Super service client, les chaussures sont authentiques.",
+            "author": "Omar H.",
+            "city": "Marrakech"
+          }
+        }
+      },
+      "block_order": ["testimonial_1", "testimonial_2", "testimonial_3"],
+      "settings": {}
+    }
+  },
+  "order": ["homepage"]
+}

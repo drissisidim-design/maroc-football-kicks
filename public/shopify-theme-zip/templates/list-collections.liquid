@@ -1,0 +1,31 @@
+<div class="gd-collection-page">
+  <div class="gd-container">
+    <div class="gd-collection-header gd-reveal">
+      <p class="gd-section-label">Nos collections</p>
+      <h1 class="gd-section-title">Collections</h1>
+    </div>
+
+    <div class="gd-products-grid">
+      {% for collection in collections %}
+        {% if collection.products.size > 0 %}
+          <a href="{{ collection.url }}" class="gd-product-card gd-reveal">
+            <div class="gd-image-wrap">
+              {% if collection.image %}
+                <img src="{{ collection.image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" loading="lazy" />
+              {% elsif collection.products.first.featured_image %}
+                <img src="{{ collection.products.first.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" loading="lazy" />
+              {% else %}
+                <div style="width:100%;height:100%;background:var(--gd-card-bg);display:flex;align-items:center;justify-content:center;color:var(--gd-muted);">{{ collection.title }}</div>
+              {% endif %}
+              <div class="gd-hover-overlay"><span>Voir la collection</span></div>
+            </div>
+            <div class="gd-info">
+              <p class="gd-name">{{ collection.title }}</p>
+              <p style="font-size:.75rem;color:var(--gd-muted);">{{ collection.products_count }} produits</p>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

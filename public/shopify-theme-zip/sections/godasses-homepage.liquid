@@ -1,0 +1,195 @@
+<!-- ══════════ HERO ══════════ -->
+<section class="gd-hero">
+  <div class="gd-hero-bg">
+    {% if section.settings.hero_image != blank %}
+      <img src="{{ section.settings.hero_image | image_url: width: 1600 }}" alt="{{ section.settings.hero_title | escape }}" loading="eager" />
+    {% else %}
+      <img src="https://images.unsplash.com/photo-1511886929837-354d827aae26?w=1600&q=80" alt="Chaussures de football" />
+    {% endif %}
+    <div class="gd-hero-overlay"></div>
+  </div>
+  <div class="gd-container gd-hero-content">
+    <p class="gd-hero-subtitle">{{ section.settings.hero_subtitle | default: 'Nouvelle collection 2026' }}</p>
+    <h1 class="gd-hero-title">
+      {{ section.settings.hero_title_line1 | default: 'Domine le' }}<br />
+      <span class="gd-highlight">{{ section.settings.hero_title_highlight | default: 'terrain' }}</span>
+    </h1>
+    <p class="gd-hero-text">{{ section.settings.hero_text | default: 'Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc.' }}</p>
+    <div class="gd-hero-cta">
+      <a href="{{ section.settings.hero_cta_link | default: '/collections/all' }}" class="gd-btn gd-btn-primary gd-neon-glow">
+        {{ section.settings.hero_cta_text | default: 'Voir la boutique' }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FEATURES STRIP ══════════ -->
+<section class="gd-features gd-reveal">
+  <div class="gd-container">
+    <div class="gd-grid">
+      <div class="gd-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="13" x="6" y="4" rx="2"/><path d="m22 7-7.1 3.78c-.57.3-1.23.3-1.8 0L6 7"/><path d="M2 14h2"/><path d="M2 10h2"/><path d="M2 18h2"/></svg>
+        Livraison partout au Maroc
+      </div>
+      <div class="gd-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+        100% Authentique
+      </div>
+      <div class="gd-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Retours sous 14 jours
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ BEST SELLERS ══════════ -->
+<section class="gd-section gd-reveal">
+  <div class="gd-container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;">
+      <div>
+        <p class="gd-section-label">Populaire</p>
+        <h2 class="gd-section-title">Nos Produits</h2>
+      </div>
+      <a href="/collections/all" class="gd-nav-link" style="font-size:.875rem;display:flex;align-items:center;gap:.25rem;">
+        Tout voir
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="gd-products-grid">
+      {% assign collection_handle = section.settings.featured_collection | default: 'all' %}
+      {% assign product_limit = section.settings.products_count | default: 6 %}
+      {% for product in collections[collection_handle].products limit: product_limit %}
+        <a href="{{ product.url }}" class="gd-product-card">
+          <div class="gd-image-wrap">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy" />
+            {% else %}
+              <div style="width:100%;height:100%;background:var(--gd-card-bg);display:flex;align-items:center;justify-content:center;color:var(--gd-muted);">No Image</div>
+            {% endif %}
+            {% if product.compare_at_price > product.price %}
+              {% assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+              <span class="gd-badge gd-badge-promo">-{{ discount }}%</span>
+            {% endif %}
+            <div class="gd-hover-overlay"><span>Voir le produit</span></div>
+          </div>
+          <div class="gd-info">
+            <p class="gd-brand">{{ product.vendor }}</p>
+            <p class="gd-name">{{ product.title }}</p>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <span class="gd-price">{{ product.price | money }}</span>
+              {% if product.compare_at_price > product.price %}
+                <span class="gd-price-old">{{ product.compare_at_price | money }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% else %}
+        <p style="color:var(--gd-muted);grid-column:1/-1;text-align:center;">Aucun produit trouvé. Ajoutez des produits à votre collection.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PROMO BANNER ══════════ -->
+<section class="gd-section gd-promo gd-reveal">
+  <div class="gd-gradient-radial" style="position:absolute;inset:0;"></div>
+  <div class="gd-container" style="position:relative;">
+    <p class="gd-section-label" style="text-align:center;">Offre limitée</p>
+    <h2 class="gd-promo-title" style="text-align:center;">
+      Jusqu'à <span class="gd-neon-text">-25%</span>
+    </h2>
+    <p style="text-align:center;color:var(--gd-muted);max-width:28rem;margin:1rem auto 2rem;">
+      Profitez de nos promotions exceptionnelles sur une sélection de chaussures de football.
+    </p>
+    <div style="text-align:center;">
+      <a href="/collections/all" class="gd-btn gd-btn-primary gd-neon-glow">Voir les promos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TESTIMONIALS ══════════ -->
+<section class="gd-section gd-reveal">
+  <div class="gd-container">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <p class="gd-section-label">Avis clients</p>
+      <h2 class="gd-section-title">Ce qu'ils disent</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;">
+      {% for block in section.blocks %}
+        {% if block.type == 'testimonial' %}
+          <div class="gd-testimonial" {{ block.shopify_attributes }}>
+            <div class="gd-stars">
+              {% for i in (1..5) %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {% endfor %}
+            </div>
+            <p class="gd-text">"{{ block.settings.text }}"</p>
+            <p class="gd-author">{{ block.settings.author }}</p>
+            <p class="gd-city">{{ block.settings.city }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ NEWSLETTER ══════════ -->
+<section class="gd-section gd-reveal" style="border-top:1px solid var(--gd-border);">
+  <div class="gd-container" style="text-align:center;">
+    <p class="gd-section-label">Newsletter</p>
+    <h2 class="gd-section-title" style="margin-bottom:1rem;">Restez informé</h2>
+    <p style="color:var(--gd-muted);font-size:.875rem;margin-bottom:1.5rem;max-width:28rem;margin-left:auto;margin-right:auto;">
+      Recevez nos offres exclusives et les dernières nouveautés directement dans votre boîte mail.
+    </p>
+    {% form 'customer' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="gd-newsletter-form">
+        <input type="email" name="contact[email]" placeholder="votre@email.com" required>
+        <button type="submit" class="gd-btn gd-btn-primary gd-neon-glow" style="padding:.75rem 1.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Godasses Homepage",
+  "settings": [
+    { "type": "image_picker", "id": "hero_image", "label": "Image Hero" },
+    { "type": "text", "id": "hero_subtitle", "label": "Sous-titre Hero", "default": "Nouvelle collection 2026" },
+    { "type": "text", "id": "hero_title_line1", "label": "Titre ligne 1", "default": "Domine le" },
+    { "type": "text", "id": "hero_title_highlight", "label": "Mot en surbrillance", "default": "terrain" },
+    { "type": "textarea", "id": "hero_text", "label": "Texte Hero", "default": "Les meilleures chaussures de football des plus grandes marques, livrées partout au Maroc." },
+    { "type": "text", "id": "hero_cta_text", "label": "Bouton CTA texte", "default": "Voir la boutique" },
+    { "type": "url", "id": "hero_cta_link", "label": "Bouton CTA lien", "default": "/collections/all" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection à afficher" },
+    { "type": "range", "id": "products_count", "min": 3, "max": 12, "step": 1, "default": 6, "label": "Nombre de produits" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Avis client",
+      "settings": [
+        { "type": "textarea", "id": "text", "label": "Texte", "default": "Qualité incroyable!" },
+        { "type": "text", "id": "author", "label": "Nom", "default": "Client" },
+        { "type": "text", "id": "city", "label": "Ville", "default": "Casablanca" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Godasses Homepage",
+      "blocks": [
+        { "type": "testimonial", "settings": { "text": "Qualité incroyable, livraison rapide! Mes Mercurial sont parfaites.", "author": "Youssef B.", "city": "Casablanca" } },
+        { "type": "testimonial", "settings": { "text": "Meilleur store de foot au Maroc, je recommande à 100%!", "author": "Amine K.", "city": "Rabat" } },
+        { "type": "testimonial", "settings": { "text": "Super service client, les chaussures sont authentiques.", "author": "Omar H.", "city": "Marrakech" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

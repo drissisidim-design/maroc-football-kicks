@@ -1,0 +1,77 @@
+<nav class="gd-navbar">
+  <div class="gd-container gd-inner">
+    <a href="/" class="gd-logo"><span class="gd-neon-text">GO</span>DASSES</a>
+
+    <div class="gd-nav-links-desktop" style="display:flex;align-items:center;gap:2rem;">
+      <a href="/" class="gd-nav-link {% if request.path == '/' %}active{% endif %}">Accueil</a>
+      <a href="/collections/all" class="gd-nav-link {% if request.path contains '/collections' %}active{% endif %}">Boutique</a>
+      <a href="/pages/contact" class="gd-nav-link {% if request.path contains '/contact' %}active{% endif %}">Contact</a>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button data-cart-open style="position:relative;color:var(--gd-fg);background:none;border:none;cursor:pointer;" aria-label="Panier">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="gd-cart-badge gd-cart-count">{{ cart.item_count }}</span>
+      </button>
+
+      <button class="gd-menu-toggle" style="display:none;background:none;border:none;color:var(--gd-fg);cursor:pointer;" aria-label="Menu">
+        <svg class="gd-icon-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <svg class="gd-icon-close gd-hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="gd-mobile-menu" style="max-height:0;overflow:hidden;transition:max-height .3s ease;">
+    <div style="padding:1rem;">
+      <a href="/" class="gd-nav-link" style="display:block;padding:.5rem 0;">Accueil</a>
+      <a href="/collections/all" class="gd-nav-link" style="display:block;padding:.5rem 0;">Boutique</a>
+      <a href="/pages/contact" class="gd-nav-link" style="display:block;padding:.5rem 0;">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Cart Drawer -->
+<div class="gd-cart-overlay" data-cart-close></div>
+<div class="gd-cart-drawer">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--gd-border);font-family:var(--gd-font-display);font-size:1.25rem;text-transform:uppercase;letter-spacing:.1em;">
+    Panier (<span class="gd-cart-count">{{ cart.item_count }}</span>)
+    <button data-cart-close style="background:none;border:none;color:var(--gd-fg);cursor:pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="gd-cart-items" style="padding:1.5rem;flex:1;overflow-y:auto;">
+    {% if cart.items.size == 0 %}
+      <p style="text-align:center;color:var(--gd-muted);padding:2rem 0;">Votre panier est vide</p>
+    {% else %}
+      {% for item in cart.items %}
+        <div class="gd-cart-item">
+          <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}">
+          <div class="gd-cart-item-info">
+            <p style="font-size:.875rem;font-weight:500;">{{ item.title }}</p>
+            <p style="font-size:.75rem;color:var(--gd-muted);">{{ item.variant.title }}</p>
+            <p style="font-family:var(--gd-font-display);color:var(--gd-primary);margin-top:.25rem;">{{ item.final_line_price | money }}</p>
+            <div class="gd-qty-controls">
+              <button class="gd-qty-btn" onclick="updateQty('{{ item.key }}',{{ item.quantity | minus: 1 }})">−</button>
+              <span style="font-size:.875rem;">{{ item.quantity }}</span>
+              <button class="gd-qty-btn" onclick="updateQty('{{ item.key }}',{{ item.quantity | plus: 1 }})">+</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div style="padding:1.5rem;border-top:1px solid var(--gd-border);">
+    <div style="display:flex;justify-content:space-between;font-family:var(--gd-font-display);font-size:1.25rem;margin-bottom:1rem;">
+      <span>Total</span>
+      <span class="gd-cart-total">{{ cart.total_price | money }}</span>
+    </div>
+    <a href="/checkout" class="gd-btn gd-btn-primary gd-neon-glow" style="width:100%;justify-content:center;">Commander</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
